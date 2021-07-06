@@ -1,0 +1,25 @@
+.grid-container
+    @for $i from 1 through 12
+        &.cols-#{$i}
+            +grid-cols($i)
+
+    &.cols
+        @each $device, $width in $dw
+            &-#{$device}
+                +screen-min($width)
+                    @for $i from 1 through 12
+                        &-#{$i}
+                            +grid-cols($i)
+
+.flex-container
+    @for $i from 1 through 12
+        .col-#{$i}
+            width: math.div(100%, 12) * $i
+
+    .col
+        @each $device, $width in $dw
+            &-#{$device}
+                +screen-min($width)
+                    @for $i from 1 through 12
+                        &-#{$i}
+                            width: math.div(100%, 12) * $i

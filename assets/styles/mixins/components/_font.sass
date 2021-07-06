@@ -1,0 +1,16 @@
+=font-face($font-family, $file-path, $weight: normal, $style: normal, $asset-pipeline: false )
+    @font-face
+        font-family: $font-family
+        font-weight: $weight
+        font-style: $style
+
+        @if $asset-pipeline == true
+            src: font-url($file-path+$font-family+'.eot/'),
+            src: font-url($file-path+$font-family+'.eot?#iefix') format('embedded-opentype')
+            src: font-url($file-path+$font-family+'.woff/') format('woff')
+            src: font-url($file-path+$font-family+'.ttf/') format('truetype')
+        @else
+            src: url($file-path+$font-family+'.eot/')
+            src: url($file-path+$font-family+'.eot?#iefix') format('embedded-opentype')
+            src: url($file-path+$font-family+'.woff/') format('woff')
+            src: url($file-path+$font-family+'.ttf/') format('truetype')

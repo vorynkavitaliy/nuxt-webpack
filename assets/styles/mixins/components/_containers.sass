@@ -1,0 +1,14 @@
+=grid-cols($i)
+    grid-template-columns: repeat(#{$i},1fr)
+
+=device-col($dw, $col-dw, $offset)
+    +screen-min($dw)
+        width: #{$col-dw}
+
+=f-row($dw)
+    +screen-min($dw)
+        flex-direction: row
+
+=f-column($dw)
+    +screen-min($dw)
+        flex-direction: column

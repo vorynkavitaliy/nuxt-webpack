@@ -1,0 +1,23 @@
+=screen-min($dw)
+    @media screen and ( min-width: $dw )
+        @content
+
+=screen-max($dw)
+    @media screen and ( max-width: $dw )
+        @content
+
+=screen-from-to($from, $to)
+    @media screen and ( min-width: $from ) and ( max-width: $to )
+        @content
+
+=screen-min-height($dw)
+    @media screen and ( min-height: $from )
+        @content
+
+=screen-max-height($dw)
+    @media screen and ( max-height: $from )
+        @content
+
+=screen-from-to-height($from, $to)
+    @media screen and ( min-height: $from ) and ( max-height: $to )
+        @content
