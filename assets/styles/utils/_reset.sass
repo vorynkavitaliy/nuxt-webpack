@@ -1,8 +1,55 @@
 *
-	box-sizing: border-box
-	margin: 0	
-	padding: 0
+    box-sizing: border-box
+    margin: 0
+    padding: 0
 
 html, body
-	min-width: 300px 
-	position: relative
+    min-width: 300px
+    position: relative
+    font-family: $font
+    -webkit-font-smoothing: antialiased
+    -moz-osx-font-smoothing: grayscale
+    color: $primary
+    font-size: $font-size
+
+h1,h2,h3,h4,h5,h6,p,a,i,em,strong
+    font-style: normal
+    font-family: inherit
+    text-decoration: none
+    font-weight: normal
+    color: inherit
+    padding: 0
+    margin: 0
+    font-family: inherit
+
+a, button
+    cursor: pointer
+    transition: all 0.3s ease
+    font-family: inherit
+    background-color: transparent
+
+ul
+    list-style: none
+    font-family: inherit
+
+img
+    width: 100%
+    height: auto
+    user-select: none
+
+input, textarea, button, select
+    outline: none
+    border: none
+    font-family: inherit
+    background-color: transparent
+
+input[type='submit']
+    cursor: pointer
+    font-family: inherit
+
+input::-webkit-input-placeholder, input::-moz-placeholder, input:-moz-placeholder, input:-ms-input-placeholder
+    color: initial
+    font-family: inherit
+
+textarea::-webkit-input-placeholder, textarea::-moz-placeholder, textarea:-moz-placeholder, textarea:-ms-input-placeholder
+    font-family: inherit

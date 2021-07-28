@@ -1,0 +1,11 @@
+$primary: red;
+$danger: #000;
+$warning: #000;
+$info: #000;
+
+:export {
+    primary: $primary;
+    danger: $danger;
+    warning: $warning;
+    info: $info;
+}

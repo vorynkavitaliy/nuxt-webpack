@@ -1,0 +1,14 @@
+$min-width: 320px;
+$max-width: 1440px;
+$max-width-container: 1552;
+$lg: $max-width-container + 12px;
+$smd: 991.98px;
+$md: 767.98px;
+$sd: 479.98px;
+
+:export {
+    lg: $max-width-container + 12;
+    smd: 991.98;
+    md: 767.98;
+    sd: 479.98;
+}

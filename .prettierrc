@@ -2,5 +2,9 @@
     "semi": false,
     "singleQuote": true,
     "ignoreGlobals": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "tabWidth": 4,
+    "prettier.arrowParens": "avoid",
     "endOfLine": "auto"
 }

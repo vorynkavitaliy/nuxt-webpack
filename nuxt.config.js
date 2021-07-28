@@ -1,86 +1,182 @@
-const imageminMozjpeg = require('imagemin-mozjpeg')
-const ImageminPlugin = require('imagemin-webpack-plugin').default
 const isDev = process.env.NODE_ENV !== 'production'
 
-module.exports = {
-    ...(!isDev && {
-        modern: 'client',
-        html: {
-            minify: {
-                collapseBooleanAttributes: true,
-                decodeEntities: true,
-                minifyCSS: true,
-                minifyJS: true,
-                processConditionalComments: true,
-                removeEmptyAttributes: true,
-                removeRedundantAttributes: true,
-                trimCustomFragments: true,
-                useShortDoctype: true,
-            },
-        },
-    }),
-    head: {
-        htmlAttrs: {
-            lang: 'ru',
-        },
-        title: 'Nuxt Webpack',
-        meta: [{ hid: 'description', name: 'description', content: 'content' }],
-        link: [{ rel: 'shortcut icon', href: 'favicon.ico' }],
+export default {
+    env: {
+        baseURL: process.env.BASE_URL,
     },
-    rootDir: __dirname,
+    // privateRuntimeConfig: {
+    //     apiSecret: process.env.API_SECRET,
+    // },
+    head: {
+        title: 'V.Vitaliy',
+        meta: [
+            { charset: 'utf-8' },
+            {
+                name: 'viewport',
+                content: 'width=device-width, initial-scale=1',
+            },
+            { hid: 'description', name: 'description', content: '' },
+        ],
+        link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    },
     router: {
         prefetchLinks: false,
     },
-    loading: { color: '#ddd' },
+    render: {
+        resourceHints: false,
+    },
+    cache: {
+        max: 1000,
+        maxAge: 900000,
+    },
     css: ['normalize.css', '@/assets/styles/index.sass'],
-    // styleResources: {
-    //     sass: ['~~/assets/styles/.sass'],
-    // },
-    modules: [
-        'nuxt-trailingslash-module',
-        'nuxt-webfontloader',
-        'cookie-universal-nuxt',
-        '@nuxtjs/style-resources',
-    ],
-
+    styleResources: {
+        sass: ['@/assets/styles/ext.sass'],
+    },
     webfontloader: {
         events: false,
         google: {
-            families: ['Montserrat:400,500,600:cyrillic&display=swap'],
+            families: ['Ubuntu:wght@400;500&display=swap'],
         },
         timeout: 5000,
     },
-    optimizeCss: false,
-    filenames: {
-        app: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
-        chunk: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
-        css: ({ isDev }) => (isDev ? '[name].css' : 'css/[contenthash].css'),
-        img: ({ isDev }) =>
-            isDev ? '[path][name].[ext]' : 'img/[contenthash:7].[ext]',
-        font: ({ isDev }) =>
-            isDev ? '[path][name].[ext]' : 'fonts/[contenthash:7].[ext]',
-    },
-    splitChunks: {
-        layouts: true,
-        pages: true,
-        commons: true,
-    },
-    optimization: {
-        minimize: !isDev,
-    },
-    plugins: [{ src: '~~/plugins/vue-lazy-load.js' }],
+    components: true,
+    modules: [
+        '@nuxtjs/pwa',
+        'nuxt-webfontloader',
+        '@nuxtjs/style-resources',
+        'cookie-universal-nuxt',
+        '@/modules/svg-sprite-inject.module.js',
+        [
+            'nuxt-i18n',
+            {
+                locales: [
+                    {
+                        code: 'ru',
+                        name: 'ru',
+                        file: 'ru.json',
+                        iso: 'ru-RU',
+                    },
+                ],
+                defaultLocale: 'ru',
+                detectBrowserLanguage: false,
+                lazy: true,
+                langDir: 'assets/locales/',
+                vueI18n: {
+                    fallbackLocale: 'ru',
+                },
+            },
+        ],
+        [
+            'nuxt-compress',
+            {
+                gzip: {
+                    threshold: 8192,
+                },
+                brotli: {
+                    threshold: 8192,
+                },
+            },
+        ],
+    ],
+    plugins: [
+        '@/plugins/scss',
+        '@/plugins/svg-sprite-extract',
+        '@/plugins/ui-components',
+    ],
     buildModules: ['@nuxtjs/eslint-module', '@nuxt/postcss8'],
-    transpile: ['vue-lazy-hydration', 'intersection-observer'],
+    pwa: {
+        manifest: {
+            lang: 'en',
+        },
+    },
     build: {
+        transpile: ['vue-lazy-hydration'],
+        terser: {
+            extractComments: {
+                filename: 'LICENSES',
+            },
+            terserOptions: {
+                warnings: false,
+                compress: {
+                    drop_console: true,
+                    pure_funcs: ['console.log'],
+                },
+                output: {
+                    comments: /^\**!|@preserve|@license|@cc_on/,
+                },
+                parallel: true,
+                cache: false,
+                sourceMap: isDev,
+            },
+        },
+        splitChunks: {
+            layouts: false,
+            pages: true,
+            commons: true,
+        },
+        optimizeCss: false,
+        filenames: {
+            app: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
+            chunk: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
+            css: ({ isDev }) =>
+                isDev ? '[name].css' : 'css/[contenthash].css',
+            img: ({ isDev }) =>
+                isDev ? '[path][name].[ext]' : 'img/[contenthash:7].[ext]',
+            font: ({ isDev }) =>
+                isDev ? '[path][name].[ext]' : 'fonts/[contenthash:7].[ext]',
+            video: ({ isDev }) =>
+                isDev ? '[path][name].[ext]' : 'videos/[contenthash:7].[ext]',
+        },
+        ...(!isDev && {
+            html: {
+                minify: {
+                    collapseBooleanAttributes: true,
+                    decodeEntities: true,
+                    minifyCSS: true,
+                    minifyJS: true,
+                    processConditionalComments: true,
+                    removeEmptyAttributes: true,
+                    removeRedundantAttributes: true,
+                    trimCustomFragments: true,
+                    useShortDoctype: true,
+                },
+            },
+        }),
+        optimization: {
+            minimize: !isDev,
+            moduleIds: 'hashed',
+            chunkIds: 'named',
+            splitChunks: {
+                chunks: 'all',
+                automaticNameDelimiter: '.',
+                cacheGroups: {
+                    styles: {
+                        name: 'styles',
+                        test: /\.(css|vue)$/,
+                        chunks: 'all',
+                        enforce: true,
+                    },
+                    libs: {
+                        name: 'chunk-libs',
+                        test: /[\\/]node_modules[\\/]/,
+                        priority: 10,
+                        chunks: 'initial',
+                    },
+                },
+            },
+        },
+        ...(!isDev && {
+            extractCSS: {
+                ignoreOrder: true,
+            },
+        }),
         postcss: {
-            extractCSS: { ignoreOrder: true },
             plugins: {
-                'postcss-import': true,
-                'postcss-url': false,
                 ...(!isDev && {
+                    'postcss-url': false,
                     'postcss-preset-env': {
-                        browsers: 'cover 99.5%',
-                        autoprefixer: true,
+                        browsers: ['ie >= 8', 'last 4 version'],
                         stage: 0,
                     },
                 }),
@@ -93,77 +189,39 @@ module.exports = {
                     sort: 'mobile-first',
                 },
             },
+            preset: {
+                autoprefixer: {
+                    grid: true,
+                },
+            },
         },
-    },
-
-    extend(config, ctx) {
-        const ORIGINAL_TEST = '/\\.(png|jpe?g|gif|svg|webp)$/i'
-        const vueSvgLoader = [
-            {
-                loader: 'vue-svg-loader',
-                options: {
-                    svgo: false,
-                },
-            },
-        ]
-        const imageMinPlugin = new ImageminPlugin({
-            pngquant: {
-                quality: '5-30',
-                speed: 7,
-                strip: true,
-            },
-            jpegtran: {
-                progressive: true,
-            },
-            gifsicle: {
-                interlaced: true,
-            },
-            plugins: [
-                imageminMozjpeg({
-                    quality: 70,
-                    progressive: true,
-                }),
-            ],
-        })
-
-        if (!ctx.isDev) config.plugins.push(imageMinPlugin)
-        config.module.rules.forEach((rule) => {
-            if (rule.test.toString() === ORIGINAL_TEST) {
-                rule.test = /\.(png|jpe?g|gif|webp)$/i
-                rule.use = [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 1000,
-                            name: ctx.isDev
-                                ? '[path][name].[ext]'
-                                : 'img/[contenthash:7].[ext]',
-                        },
-                    },
-                ]
+        extend(config, ctx) {
+            if (ctx.isClient) {
+                config.devtool = 'source-map'
             }
-        })
-
-        const svgRule = {
-            test: /\.svg$/,
-            oneOf: [
-                {
-                    resourceQuery: /inline/,
-                    use: vueSvgLoader,
+            if (ctx.isClient) {
+                config.optimization.splitChunks.maxSize = 210000
+            }
+            const svgRule = config.module.rules.find((rule) =>
+                rule.test.test('.svg'),
+            )
+            svgRule.test = /\.(png|jpe?g|gif|webp)$/
+            config.module.rules.push({
+                test: /\.svg$/,
+                loader: 'raw-loader',
+                options: {
+                    esModule: false,
                 },
-                {
-                    resourceQuery: /data/,
-                    loader: 'url-loader',
+            })
+            config.module.rules.push({
+                enforce: 'pre',
+                test: /\.(js|vue)$/,
+                loader: 'eslint-loader',
+                exclude: /(node_modules)/,
+                options: {
+                    fix: true,
                 },
-                {
-                    resourceQuery: /raw/,
-                    loader: 'raw-loader',
-                },
-                {
-                    loader: 'file-loader', // By default, always use file-loader
-                },
-            ],
-        }
-        config.module.rules.push(svgRule)
+            })
+        },
     },
 }
